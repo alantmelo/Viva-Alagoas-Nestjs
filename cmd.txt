@@ -1,0 +1,2 @@
+npx prisma init
+npm run dev
