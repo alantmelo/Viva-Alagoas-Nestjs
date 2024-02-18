@@ -33,29 +33,13 @@ export class UserController {
   }
 
   @Put(':id')
-  update(
-    @Body() { name, email, password }: UpdatePutUser,
-    @Param('id', ParseIntPipe) id,
-  ) {
-    return {
-      name,
-      email,
-      password,
-      id,
-    };
+  update(@Body() data: UpdatePutUser, @Param('id', ParseIntPipe) id) {
+    return this.userService.update(id, data);
   }
 
   @Patch(':id')
-  partialUpdate(
-    @Body() { name, email, password }: UpdatePatchUser,
-    @Param('id', ParseIntPipe) id,
-  ) {
-    return {
-      name,
-      email,
-      password,
-      id,
-    };
+  partialUpdate(@Body() data: UpdatePatchUser, @Param('id', ParseIntPipe) id) {
+    return this.userService.updatePartial(id, data);
   }
 
   @Delete(':id')

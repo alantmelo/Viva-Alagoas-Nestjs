@@ -1,2 +1,7 @@
 npx prisma init
 npm run dev
+
+Migrations
+npx prisma migrate dev --name addBirthAt
+npx prisma generate
+-----------------------------------------
