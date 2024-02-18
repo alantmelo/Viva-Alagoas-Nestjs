@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaSerice } from 'src/prisma/prisma.service';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { UpdatePutUser } from './dto/update-put-user.dto';
@@ -23,9 +23,6 @@ export class UserService {
   }
   async list() {
     return this.prisma.user.findMany({
-      where: {
-        email: { contains: '@gmail.com' },
-      },
       select: {
         email: true,
         name: true,
@@ -48,6 +45,7 @@ export class UserService {
     });
   }
   async update(id: number, { name, email, password, birthAt }: UpdatePutUser) {
+    await this.exists(id);
     return this.prisma.user.update({
       data: {
         name,
@@ -64,6 +62,7 @@ export class UserService {
     id: number,
     { name, email, password, birthAt }: UpdatePatchUser,
   ) {
+    await this.exists(id);
     return this.prisma.user.update({
       data: {
         name,
@@ -75,5 +74,15 @@ export class UserService {
         id,
       },
     });
+  }
+  async delete(id: number) {
+    await this.exists(id);
+    return this.prisma.user.delete({ where: { id } });
+  }
+
+  async exists(id: number) {
+    if (!(await this.getOne(id))) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

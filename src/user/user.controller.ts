@@ -18,7 +18,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  index() {
+  async index() {
     return this.userService.list();
   }
 
@@ -28,24 +28,25 @@ export class UserController {
   }
 
   @Get(':id')
-  getOne(@Param('id', ParseIntPipe) id) {
+  async getOne(@Param('id', ParseIntPipe) id) {
     return this.userService.getOne(id);
   }
 
   @Put(':id')
-  update(@Body() data: UpdatePutUser, @Param('id', ParseIntPipe) id) {
+  async update(@Body() data: UpdatePutUser, @Param('id', ParseIntPipe) id) {
     return this.userService.update(id, data);
   }
 
   @Patch(':id')
-  partialUpdate(@Body() data: UpdatePatchUser, @Param('id', ParseIntPipe) id) {
+  async partialUpdate(
+    @Body() data: UpdatePatchUser,
+    @Param('id', ParseIntPipe) id,
+  ) {
     return this.userService.updatePartial(id, data);
   }
 
   @Delete(':id')
-  delete(@Param('id', ParseIntPipe) id) {
-    return {
-      id,
-    };
+  async delete(@Param('id', ParseIntPipe) id) {
+    return this.userService.delete(id);
   }
 }
