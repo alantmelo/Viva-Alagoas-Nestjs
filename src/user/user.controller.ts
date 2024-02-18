@@ -18,8 +18,8 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   @Get()
-  index(): string {
-    return 'index';
+  index() {
+    return this.userService.list();
   }
 
   @Post()
@@ -29,7 +29,7 @@ export class UserController {
 
   @Get(':id')
   getOne(@Param('id', ParseIntPipe) id) {
-    return id;
+    return this.userService.getOne(id);
   }
 
   @Put(':id')
