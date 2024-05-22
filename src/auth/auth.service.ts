@@ -1,15 +1,27 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { sign, verify } from 'crypto';
+import { User } from '@prisma/client';
+// import { sign, verify } from 'crypto';
 import { PrismaSerice } from 'src/prisma/prisma.service';
+import { AuthRegisterDTO } from './dto/auth.register.dto';
+import { UserService } from 'src/user/user.service';
+import { CreateUserDTO } from 'src/user/dto/create-user.dto';
+
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jWTService: JwtService,
     private readonly prisma: PrismaSerice,
+    private readonly userService: UserService,
   ) {}
-  async createToken() {
-    // return this.jWTService.sign();
+  async createToken(user: User) {
+    return {
+      accessToken: this.jWTService.sign({
+        sub: user.id,
+        name: user.name,
+        email: user.email,
+      }),
+    };
   }
   async checkToken() {
     // return this.jWTService.verify();
@@ -21,7 +33,7 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException();
     }
-    return user;
+    return this.createToken(user);
     // return this.jWTService.verify();
   }
   async forget(email: string) {
@@ -46,5 +58,9 @@ export class AuthService {
       },
     });
     return true;
+  }
+  async register(data: CreateUserDTO) {
+    const user = await this.userService.create(data);
+    return this.createToken(user);
   }
 }
