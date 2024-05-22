@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCityDto } from './dto/create-city.dto';
 import { UpdateCityDto } from './dto/update-city.dto';
+import { PrismaSerice } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class CitiesService {
-  create(createCityDto: CreateCityDto) {
-    return 'This action adds a new city';
+  constructor(private readonly prisma: PrismaSerice) {}
+  async create(createCityDto: CreateCityDto) {
+    return this.prisma.city.create({
+      data: createCityDto,
+    });
   }
 
   findAll() {
@@ -22,5 +26,16 @@ export class CitiesService {
 
   remove(id: number) {
     return `This action removes a #${id} city`;
+  }
+  async exists(id: number) {
+    if (
+      !(await this.prisma.city.count({
+        where: {
+          id,
+        },
+      }))
+    ) {
+      throw new NotFoundException('User not found');
+    }
   }
 }

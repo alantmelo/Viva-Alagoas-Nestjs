@@ -19,15 +19,15 @@ model User {
 }
 
 model City {
-  id          Int      @id @default(autoincrement())
-  name        String   @db.VarChar(200) @unique
-  description String   @db.Text()
-  geolocation    String   @db.VarChar(20)
-  youtube    String   @db.VarChar(255)
-  state    String   @db.VarChar(255)
-  status   Boolean  @default(true)
-  created_at  DateTime @default(now()) @db.Timestamp(0)
-  updated_at  DateTime @default(now()) @db.Timestamp(0)
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200) @unique
+  description   String   @db.Text()
+  geolocation   String   @db.VarChar(20)
+  youtube       String?   @db.VarChar(255)
+  state         String   @db.VarChar(255)
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
   @@map("cities")
 }
 
