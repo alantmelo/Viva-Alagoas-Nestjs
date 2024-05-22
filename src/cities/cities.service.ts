@@ -12,21 +12,48 @@ export class CitiesService {
     });
   }
 
-  findAll() {
-    return `This action returns all cities`;
+  async findAll() {
+    return this.prisma.city.findMany({
+      select: {
+        id: true,
+        name: true,
+        description: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} city`;
+  async findOne(id: number) {
+    await this.exists(id);
+    return this.prisma.city.findUnique({
+      where: {
+        id,
+      },
+      select: {
+        name: true,
+        description: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
-  update(id: number, updateCityDto: UpdateCityDto) {
-    return `This action updates a #${id} city`;
+  async update(id: number, updateCityDto: UpdateCityDto) {
+    await this.exists(id);
+    return this.prisma.city.update({
+      data: updateCityDto,
+      where: {
+        id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} city`;
+  async remove(id: number) {
+    await this.exists(id);
+    return this.prisma.city.delete({ where: { id } });
   }
+
   async exists(id: number) {
     if (
       !(await this.prisma.city.count({
@@ -35,7 +62,7 @@ export class CitiesService {
         },
       }))
     ) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('City not found');
     }
   }
 }
