@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { BeachesService } from './beaches.service';
 import { CreateBeachDto } from './dto/create-beach.dto';
 import { UpdateBeachDto } from './dto/update-beach.dto';
@@ -8,8 +17,11 @@ export class BeachesController {
   constructor(private readonly beachesService: BeachesService) {}
 
   @Post()
-  create(@Body() createBeachDto: CreateBeachDto) {
-    return this.beachesService.create(createBeachDto);
+  create(
+    @Body() createBeachDto: CreateBeachDto,
+    @Body('cityId', ParseIntPipe) cityId: number,
+  ) {
+    return this.beachesService.create(createBeachDto, cityId);
   }
 
   @Get()
@@ -23,8 +35,12 @@ export class BeachesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBeachDto: UpdateBeachDto) {
-    return this.beachesService.update(+id, updateBeachDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateBeachDto: UpdateBeachDto,
+    @Body('cityId', ParseIntPipe) cityId: number,
+  ) {
+    return this.beachesService.update(+id, updateBeachDto, cityId);
   }
 
   @Delete(':id')

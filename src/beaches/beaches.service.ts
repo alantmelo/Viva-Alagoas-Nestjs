@@ -7,9 +7,19 @@ import { PrismaSerice } from 'src/prisma/prisma.service';
 export class BeachesService {
   constructor(private readonly prisma: PrismaSerice) {}
 
-  async create(createBeachDto: CreateBeachDto) {
+  async create(
+    { name, description, geolocation, youtube, directions }: CreateBeachDto,
+    cityId,
+  ) {
     return this.prisma.beach.create({
-      data: createBeachDto,
+      data: {
+        name: name,
+        description: description,
+        geolocation: geolocation,
+        youtube: youtube,
+        cityId: cityId, // Now cityId is already an integer
+        directions: directions,
+      },
     });
   }
 
@@ -21,6 +31,7 @@ export class BeachesService {
         description: true,
         created_at: true,
         updated_at: true,
+        city: true,
       },
     });
   }
@@ -32,18 +43,24 @@ export class BeachesService {
         id,
       },
       select: {
+        id: true,
         name: true,
         description: true,
         created_at: true,
         updated_at: true,
+        city: true,
       },
     });
   }
 
-  async update(id: number, updateBeachDto: UpdateBeachDto) {
+  async update(
+    id: number,
+    { name, description, geolocation, youtube, directions }: UpdateBeachDto,
+    cityId,
+  ) {
     await this.exists(id);
     return this.prisma.beach.update({
-      data: updateBeachDto,
+      data: { name, description, geolocation, youtube, directions, cityId },
       where: {
         id,
       },

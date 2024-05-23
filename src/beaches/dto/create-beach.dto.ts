@@ -1,12 +1,14 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 
 export class CreateBeachDto {
   @IsString()
   @IsNotEmpty()
   name: string;
   @IsString()
+  @MinLength(20)
   description: string;
   @IsString()
+  @MinLength(20)
   directions: string;
   @IsString()
   @IsNotEmpty()
@@ -19,4 +21,5 @@ export class CreateBeachDto {
   number: string;
   additionalAddress: string;
   zipeCode: string;
+  cityId: number;
 }
