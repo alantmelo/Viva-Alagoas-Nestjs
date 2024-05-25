@@ -6,9 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { CitiesModule } from './cities/cities.module';
 import { BeachesModule } from './beaches/beaches.module';
 import { RestaurantTypesModule } from './restaurant-types/restaurant-types.module';
+import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
-  imports: [UserModule, AuthModule, CitiesModule, BeachesModule, RestaurantTypesModule],
+  imports: [UserModule, AuthModule, CitiesModule, BeachesModule, RestaurantTypesModule, RestaurantsModule],
   controllers: [AppController],
   providers: [AppService],
 })

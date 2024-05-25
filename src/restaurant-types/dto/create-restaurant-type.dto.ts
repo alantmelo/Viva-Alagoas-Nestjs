@@ -4,4 +4,5 @@ export class CreateRestaurantTypeDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+  status: boolean;
 }
