@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRestaurantTypeDto } from './dto/create-restaurant-type.dto';
 import { UpdateRestaurantTypeDto } from './dto/update-restaurant-type.dto';
+import { PrismaSerice } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RestaurantTypesService {
-  create(createRestaurantTypeDto: CreateRestaurantTypeDto) {
-    return 'This action adds a new restaurantType';
+  constructor(private readonly prisma: PrismaSerice) {}
+
+  async create({ name }: CreateRestaurantTypeDto) {
+    return this.prisma.restaurantType.create({
+      data: {
+        name,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all restaurantTypes`;
+  async findAll() {
+    return this.prisma.restaurantType.findMany({
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} restaurantType`;
+  async findOne(id: number) {
+    await this.exists(id);
+    return this.prisma.restaurantType.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: number, updateRestaurantTypeDto: UpdateRestaurantTypeDto) {
-    return `This action updates a #${id} restaurantType`;
+  async update(id: number, { name }: UpdateRestaurantTypeDto) {
+    await this.exists(id);
+    return this.prisma.restaurantType.update({
+      data: {
+        name,
+      },
+      where: {
+        id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} restaurantType`;
+  async remove(id: number) {
+    await this.exists(id);
+    return this.prisma.restaurantType.delete({ where: { id } });
+  }
+
+  async exists(id: number) {
+    if (
+      !(await this.prisma.restaurantType.count({
+        where: {
+          id,
+        },
+      }))
+    ) {
+      throw new NotFoundException('Restaurant Type not found');
+    }
   }
 }
