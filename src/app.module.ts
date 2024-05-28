@@ -9,7 +9,14 @@ import { RestaurantTypesModule } from './restaurant-types/restaurant-types.modul
 import { RestaurantsModule } from './restaurants/restaurants.module';
 
 @Module({
-  imports: [UserModule, AuthModule, CitiesModule, BeachesModule, RestaurantTypesModule, RestaurantsModule],
+  imports: [
+    UserModule,
+    AuthModule,
+    CitiesModule,
+    BeachesModule,
+    RestaurantTypesModule,
+    RestaurantsModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

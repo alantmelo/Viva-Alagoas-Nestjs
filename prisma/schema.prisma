@@ -59,6 +59,7 @@ model RestaurantType {
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
+  restaurants   RestaurantToRestaurantType[]
   @@map("restaurant_types")
 }
 
@@ -82,5 +83,16 @@ model Restaurant {
   phone  String?  @db.VarChar(50)
   instagram  String?  @db.VarChar(100)
   website  String?  @db.VarChar(255)
+  restaurantTypes RestaurantToRestaurantType[]
 @@map("restaurants")
+
+}
+
+model RestaurantToRestaurantType {
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  restaurantType RestaurantType @relation(fields: [restaurantTypeId], references: [id])
+  restaurantTypeId Int
+  @@id([restaurantId, restaurantTypeId])
+  @@map("restaurant_to_restaurant_types")
 }
