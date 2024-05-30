@@ -8,6 +8,7 @@ import {
   Delete,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -63,6 +64,11 @@ export class RestaurantsController {
       'photos',
       `restaurant-${id}.JPG`,
     );
-    return this.fileService.upload(photo, path);
+    try {
+      await this.fileService.upload(photo, path);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+    return { success: true };
   }
 }
