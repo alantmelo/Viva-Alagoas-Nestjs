@@ -37,6 +37,7 @@ export class RestaurantsService {
         updated_at: true,
         city: true,
         restaurantTypes: true,
+        photo: true,
       },
     });
   }
@@ -50,50 +51,18 @@ export class RestaurantsService {
     });
   }
 
-  // async update(
-  //   id: number,
-  //   {
-  //     name,
-  //     description,
-  //     directions,
-  //     geolocation,
-  //     youtube,
-  //     status,
-  //     street,
-  //     neighborhood,
-  //     number,
-  //     additionalAddress,
-  //     zipeCode,
-  //     phone,
-  //     instagram,
-  //     website,
-  //   }: UpdateRestaurantDto,
-  //   cityId,
-  // ) {
-  //   await this.exists(id);
-  //   return this.prisma.restaurant.update({
-  //     data: {
-  //       name,
-  //       description,
-  //       directions,
-  //       geolocation,
-  //       youtube,
-  //       status,
-  //       street,
-  //       neighborhood,
-  //       number,
-  //       additionalAddress,
-  //       zipeCode,
-  //       cityId,
-  //       phone,
-  //       instagram,
-  //       website,
-  //     },
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  // }
+  async updatePhoto(id: number, photo: string) {
+    console.log('registro' + (await this.findOne(id)).name);
+    await this.exists(id);
+    return this.prisma.restaurant.update({
+      data: {
+        photo: photo,
+      },
+      where: {
+        id,
+      },
+    });
+  }
   async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
     const { typeIds, ...rest } = updateRestaurantDto;
     await this.ensureTypesExist(typeIds);

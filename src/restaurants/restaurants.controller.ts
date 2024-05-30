@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
+  UploadedFiles,
 } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -57,18 +58,35 @@ export class RestaurantsController {
     @UploadedFile('file') photo: Express.Multer.File,
     @Param('id') id: string,
   ) {
-    const path = join(
-      __dirname,
-      '..',
-      'storage',
-      'photos',
-      `restaurant-${id}.JPG`,
-    );
+    const extention = photo.mimetype == 'image/jpeg' ? 'jpeg' : 'png';
+    const name = `restaurant-${id}.` + extention;
+    const path = join(__dirname, '..', 'storage', 'photos', name);
     try {
       await this.fileService.upload(photo, path);
+      await this.restaurantsService.updatePhoto(+id, name);
     } catch (e) {
       throw new BadRequestException(e);
     }
     return { success: true };
   }
+  // @UseInterceptors(FileInterceptor('files'))
+  // @Post('photos/:id')
+  // async uploadPhotos(
+  //   @UploadedFiles() photos: Express.Multer.File[],
+  //   @Param('id') id: string,
+  // ) {
+  //   const path = join(
+  //     __dirname,
+  //     '..',
+  //     'storage',
+  //     'photos',
+  //     `restaurant-${id}.JPG`,
+  //   );
+  //   try {
+  //     await this.fileService.upload(photos, path);
+  //   } catch (e) {
+  //     throw new BadRequestException(e);
+  //   }
+  //   return { success: true };
+  // }
 }

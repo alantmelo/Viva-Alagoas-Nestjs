@@ -43,6 +43,7 @@ export class CreateRestaurantDto {
   @IsOptional()
   @IsString()
   phone?: string;
+  photo?: string;
 
   @IsOptional()
   @IsString()

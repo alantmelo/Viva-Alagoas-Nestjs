@@ -81,6 +81,7 @@ model Restaurant {
   city     City?         @relation(fields: [cityId], references: [id])
   cityId    Int?
   phone  String?  @db.VarChar(50)
+  photo  String?  @db.VarChar(50)
   instagram  String?  @db.VarChar(100)
   website  String?  @db.VarChar(255)
   restaurantTypes RestaurantToRestaurantType[]
