@@ -6,15 +6,22 @@ import {
   Patch,
   Param,
   Delete,
-  ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { join } from 'path';
+import { FileService } from '../file/file.service';
 
 @Controller('restaurants')
 export class RestaurantsController {
-  constructor(private readonly restaurantsService: RestaurantsService) {}
+  constructor(
+    private readonly restaurantsService: RestaurantsService,
+    private readonly fileService: FileService,
+  ) {}
 
   @Post()
   create(@Body() createRestaurantDto: CreateRestaurantDto) {
@@ -42,5 +49,20 @@ export class RestaurantsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.restaurantsService.remove(+id);
+  }
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('photo/:id')
+  async uploadPhoto(
+    @UploadedFile('file') photo: Express.Multer.File,
+    @Param('id') id: string,
+  ) {
+    const path = join(
+      __dirname,
+      '..',
+      'storage',
+      'photos',
+      `restaurant-${id}.JPG`,
+    );
+    return this.fileService.upload(photo, path);
   }
 }
