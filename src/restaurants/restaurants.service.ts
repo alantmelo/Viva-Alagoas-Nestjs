@@ -52,7 +52,6 @@ export class RestaurantsService {
   }
 
   async updatePhoto(id: number, photo: string) {
-    console.log('registro' + (await this.findOne(id)).name);
     await this.exists(id);
     return this.prisma.restaurant.update({
       data: {

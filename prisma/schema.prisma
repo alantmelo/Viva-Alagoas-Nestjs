@@ -85,6 +85,7 @@ model Restaurant {
   instagram  String?  @db.VarChar(100)
   website  String?  @db.VarChar(255)
   restaurantTypes RestaurantToRestaurantType[]
+  restaurantToServiceType RestaurantToServiceType[]
 @@map("restaurants")
 
 }
@@ -96,4 +97,41 @@ model RestaurantToRestaurantType {
   restaurantTypeId Int
   @@id([restaurantId, restaurantTypeId])
   @@map("restaurant_to_restaurant_types")
+}
+
+model AccommodationType {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
+  @@map("accommodation_type")
+}
+
+model ServiceType {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
+  @@map("service_type")
+}
+
+model RestaurantServiceType {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
+  restaurants   RestaurantToServiceType[]
+  @@map("restauran_service_type")
+}
+
+model RestaurantToServiceType {
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  restaurantServiceType RestaurantServiceType @relation(fields: [restaurantServiceTypeId], references: [id])
+  restaurantServiceTypeId Int
+  @@id([restaurantId, restaurantServiceTypeId])
+  @@map("restaurant_to_service_types")
 }
