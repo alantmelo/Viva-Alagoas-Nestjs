@@ -7,6 +7,7 @@ import { CitiesModule } from './cities/cities.module';
 import { BeachesModule } from './beaches/beaches.module';
 import { RestaurantTypesModule } from './restaurant-types/restaurant-types.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { AccommodationTypesModule } from './accommodation-types/accommodation-types.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     BeachesModule,
     RestaurantTypesModule,
     RestaurantsModule,
+    AccommodationTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
