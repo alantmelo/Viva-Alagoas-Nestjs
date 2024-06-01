@@ -25,6 +25,7 @@ model City {
   geolocation   String?  @db.VarChar(20)
   youtube       String?  @db.VarChar(255)
   state         String?  @db.VarChar(255)
+  photo         String?  @db.VarChar(60)
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
@@ -105,7 +106,7 @@ model AccommodationType {
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
-  @@map("accommodation_type")
+  @@map("accommodation_types")
 }
 
 model ServiceType {
@@ -114,7 +115,7 @@ model ServiceType {
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
-  @@map("service_type")
+  @@map("service_types")
 }
 
 model RestaurantServiceType {
@@ -124,7 +125,7 @@ model RestaurantServiceType {
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
   restaurants   RestaurantToServiceType[]
-  @@map("restauran_service_type")
+  @@map("restauran_service_types")
 }
 
 model RestaurantToServiceType {

@@ -65,4 +65,16 @@ export class CitiesService {
       throw new NotFoundException('City not found');
     }
   }
+
+  async updatePhoto(id: number, photo: string) {
+    await this.exists(id);
+    return this.prisma.city.update({
+      data: {
+        photo: photo,
+      },
+      where: {
+        id,
+      },
+    });
+  }
 }
