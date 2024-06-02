@@ -57,4 +57,6 @@ export class CreateRestaurantDto {
 
   @IsArray()
   typeIds: number[];
+  @IsArray()
+  serviceIds: number[];
 }

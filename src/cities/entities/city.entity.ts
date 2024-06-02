@@ -5,6 +5,7 @@ export class CityEntity implements City {
   description: string;
   geolocation: string;
   youtube: string;
+  photo: string;
   state: string;
   status: boolean;
   created_at: Date;

@@ -1,26 +1,66 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateRestaurantServiceTypeDto } from './dto/create-restaurant-service-type.dto';
 import { UpdateRestaurantServiceTypeDto } from './dto/update-restaurant-service-type.dto';
+import { PrismaSerice } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class RestaurantServiceTypeService {
-  create(createRestaurantServiceTypeDto: CreateRestaurantServiceTypeDto) {
-    return 'This action adds a new restaurantServiceType';
+  constructor(private readonly prisma: PrismaSerice) {}
+
+  async create({ name }: CreateRestaurantServiceTypeDto) {
+    return this.prisma.restaurantServiceType.create({
+      data: {
+        name,
+      },
+    });
   }
 
-  findAll() {
-    return `This action returns all restaurantServiceType`;
+  async findAll() {
+    return this.prisma.restaurantServiceType.findMany({
+      select: {
+        id: true,
+        name: true,
+        created_at: true,
+        updated_at: true,
+      },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} restaurantServiceType`;
+  async findOne(id: number) {
+    await this.exists(id);
+    return this.prisma.restaurantServiceType.findUnique({
+      where: {
+        id,
+      },
+    });
   }
 
-  update(id: number, updateRestaurantServiceTypeDto: UpdateRestaurantServiceTypeDto) {
-    return `This action updates a #${id} restaurantServiceType`;
+  async update(id: number, { name }: UpdateRestaurantServiceTypeDto) {
+    await this.exists(id);
+    return this.prisma.restaurantServiceType.update({
+      data: {
+        name,
+      },
+      where: {
+        id,
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} restaurantServiceType`;
+  async remove(id: number) {
+    await this.exists(id);
+    return this.prisma.restaurantServiceType.delete({ where: { id } });
+  }
+
+  async exists(id: number) {
+    if (
+      !(await this.prisma.restaurantServiceType.count({
+        where: {
+          id,
+        },
+      }))
+    ) {
+      throw new NotFoundException('Restaurant Serivice Type not found');
+    }
   }
 }

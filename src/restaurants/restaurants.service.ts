@@ -8,7 +8,7 @@ export class RestaurantsService {
   constructor(private readonly prisma: PrismaSerice) {}
 
   async create(createRestaurantDto: CreateRestaurantDto) {
-    const { typeIds, ...rest } = createRestaurantDto;
+    const { typeIds, serviceIds, ...rest } = createRestaurantDto;
     await this.ensureTypesExist(typeIds);
     const restaurant = await this.prisma.restaurant.create({
       data: {
@@ -18,9 +18,15 @@ export class RestaurantsService {
             restaurantTypeId: typeId,
           })),
         },
+        restaurantToServiceType: {
+          create: serviceIds.map((typeId) => ({
+            restaurantServiceTypeId: typeId,
+          })),
+        },
       },
       include: {
         city: true,
+        restaurantTypes: true,
       },
     });
 

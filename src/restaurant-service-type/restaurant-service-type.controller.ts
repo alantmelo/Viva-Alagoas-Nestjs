@@ -1,15 +1,29 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { RestaurantServiceTypeService } from './restaurant-service-type.service';
 import { CreateRestaurantServiceTypeDto } from './dto/create-restaurant-service-type.dto';
 import { UpdateRestaurantServiceTypeDto } from './dto/update-restaurant-service-type.dto';
 
 @Controller('restaurant-service-type')
 export class RestaurantServiceTypeController {
-  constructor(private readonly restaurantServiceTypeService: RestaurantServiceTypeService) {}
+  constructor(
+    private readonly restaurantServiceTypeService: RestaurantServiceTypeService,
+  ) {}
 
   @Post()
-  create(@Body() createRestaurantServiceTypeDto: CreateRestaurantServiceTypeDto) {
-    return this.restaurantServiceTypeService.create(createRestaurantServiceTypeDto);
+  create(
+    @Body() createRestaurantServiceTypeDto: CreateRestaurantServiceTypeDto,
+  ) {
+    return this.restaurantServiceTypeService.create(
+      createRestaurantServiceTypeDto,
+    );
   }
 
   @Get()
@@ -23,8 +37,14 @@ export class RestaurantServiceTypeController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRestaurantServiceTypeDto: UpdateRestaurantServiceTypeDto) {
-    return this.restaurantServiceTypeService.update(+id, updateRestaurantServiceTypeDto);
+  update(
+    @Param('id') id: string,
+    @Body() updateRestaurantServiceTypeDto: UpdateRestaurantServiceTypeDto,
+  ) {
+    return this.restaurantServiceTypeService.update(
+      +id,
+      updateRestaurantServiceTypeDto,
+    );
   }
 
   @Delete(':id')

@@ -55,7 +55,7 @@ export class CitiesController {
     @Param('id') id: string,
   ) {
     const extention = photo.mimetype == 'image/jpeg' ? 'jpeg' : 'png';
-    const name = `restaurant-${id}.` + extention;
+    const name = `city-${id}.` + extention;
     const path = join(__dirname, '..', 'storage', 'photos', name);
     try {
       await this.fileService.upload(photo, path);
