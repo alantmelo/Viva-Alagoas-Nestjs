@@ -54,6 +54,7 @@ export class CreateRestaurantDto {
   website?: string;
   status: boolean;
   cityId: number;
+  city: number;
 
   @IsArray()
   typeIds: number[];

@@ -8,25 +8,27 @@ export class RestaurantsService {
   constructor(private readonly prisma: PrismaSerice) {}
 
   async create(createRestaurantDto: CreateRestaurantDto) {
-    const { typeIds, serviceIds, ...rest } = createRestaurantDto;
+    const { typeIds, cityId, serviceIds, ...rest } = createRestaurantDto;
+    const restaurantServiceTypes =
+      serviceIds?.map((serviceId) => ({
+        restaurantServiceTypeId: serviceId,
+      })) || [];
     await this.ensureTypesExist(typeIds);
     const restaurant = await this.prisma.restaurant.create({
       data: {
         ...rest,
+        city: cityId ? { connect: { id: cityId } } : undefined,
         restaurantTypes: {
           create: typeIds.map((typeId) => ({
             restaurantTypeId: typeId,
           })),
         },
         restaurantToServiceType: {
-          create: serviceIds.map((typeId) => ({
-            restaurantServiceTypeId: typeId,
-          })),
+          create: restaurantServiceTypes,
         },
       },
       include: {
         city: true,
-        restaurantTypes: true,
       },
     });
 
@@ -43,6 +45,7 @@ export class RestaurantsService {
         updated_at: true,
         city: true,
         restaurantTypes: true,
+        restaurantToServiceType: true,
         photo: true,
       },
     });
@@ -69,17 +72,26 @@ export class RestaurantsService {
     });
   }
   async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
-    const { typeIds, ...rest } = updateRestaurantDto;
+    const { typeIds, cityId, serviceIds, ...rest } = updateRestaurantDto;
+    const restaurantServiceTypes =
+      serviceIds?.map((serviceId) => ({
+        restaurantServiceTypeId: serviceId,
+      })) || [];
     await this.ensureTypesExist(typeIds);
     const restaurant = await this.prisma.restaurant.update({
       where: { id },
       data: {
         ...rest,
+        city: cityId ? { connect: { id: cityId } } : undefined,
         restaurantTypes: {
           deleteMany: {}, // Remove existing types
           create: typeIds.map((typeId) => ({
             restaurantTypeId: typeId,
           })),
+        },
+        restaurantToServiceType: {
+          deleteMany: {}, // Remove existing service types
+          create: restaurantServiceTypes,
         },
       },
     });
