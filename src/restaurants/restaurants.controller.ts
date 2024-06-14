@@ -14,9 +14,14 @@ import {
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import {
+  FileInterceptor,
+  FilesInterceptor,
+  FileFieldsInterceptor,
+} from '@nestjs/platform-express';
 import { join } from 'path';
 import { FileService } from '../file/file.service';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 @Controller('restaurants')
 export class RestaurantsController {
@@ -69,37 +74,31 @@ export class RestaurantsController {
     }
     return { success: true };
   }
-  // @Post('photos/:id')
-  // @UseInterceptors(FilesInterceptor('files', 10))
-  // async uploadPhotos(
-  //   @UploadedFiles() files: Array<Express.Multer.File>,
-  //   @Param('id') id: string,
-  // ) {
-  //   try {
-  //     await this.restaurantsService.savePhotos(+id, files);
-  //   } catch (e) {
-  //     throw new BadRequestException(e.message);
-  //   }
-  //   return { success: true };
-  // }
-  // @UseInterceptors(FileInterceptor('files'))
-  // @Post('photos/:id')
-  // async uploadPhotos(
-  //   @UploadedFiles() photos: Express.Multer.File[],
-  //   @Param('id') id: string,
-  // ) {
-  //   const path = join(
-  //     __dirname,
-  //     '..',
-  //     'storage',
-  //     'photos',
-  //     `restaurant-${id}.JPG`,
-  //   );
-  //   try {
-  //     await this.fileService.upload(photos, path);
-  //   } catch (e) {
-  //     throw new BadRequestException(e);
-  //   }
-  //   return { success: true };
-  // }
+  @UseInterceptors(FilesInterceptor('photos', 10))
+  @Post('gallery/:id')
+  async uploadPhotos(
+    @UploadedFiles() photos: Array<Express.Multer.File>,
+    @Param('id') id: string,
+  ) {
+    const photoUrls: string[] = [];
+    const uploadDir = join(__dirname, '..', 'storage', 'photos');
+    if (!existsSync(uploadDir)) {
+      mkdirSync(uploadDir, { recursive: true });
+    }
+    console.log(photos);
+    console.log(id);
+    try {
+      photos.forEach((photo) => {
+        const ext = photo.mimetype.split('/')[1];
+        const photoName = `restaurant-gallery-${id}-${Date.now()}.${ext}`;
+        const photoPath = join(uploadDir, photoName);
+        writeFileSync(photoPath, photo.buffer);
+        photoUrls.push(photoName);
+      });
+      await this.restaurantsService.addPhotos(+id, photoUrls);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+    return { success: true };
+  }
 }

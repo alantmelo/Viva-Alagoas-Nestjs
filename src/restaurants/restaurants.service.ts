@@ -71,20 +71,16 @@ export class RestaurantsService {
       },
     });
   }
-  // async savePhotos(restaurantId: number, files: Array<Express.Multer.File>) {
-  //   await this.exists(restaurantId);
-
-  //   const photoPaths = files.map((file) => file.filename);
-
-  //   await this.prisma.restaurant.update({
-  //     where: { id: restaurantId },
-  //     data: {
-  //       photos: {
-  //         set: photoPaths, // Adjust this if you have a different photo field structure
-  //       },
-  //     },
-  //   });
-  // }
+  async addPhotos(id: number, photos: string[]) {
+    await this.exists(id);
+    const createPhotos = photos.map((photo) => ({
+      url: photo,
+      restaurantId: id,
+    }));
+    return this.prisma.photo.createMany({
+      data: createPhotos,
+    });
+  }
   async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
     const { typeIds, cityId, serviceIds, ...rest } = updateRestaurantDto;
     const restaurantServiceTypes =

@@ -86,8 +86,8 @@ model Restaurant {
   photo  String?  @db.VarChar(50)
   instagram  String?  @db.VarChar(100)
   openingHours  String?  @db.VarChar(256)
-  // photos  String[]
   website  String?  @db.VarChar(255)
+  photos        Photo[]  @relation("RestaurantPhotos")
   restaurantTypes RestaurantToRestaurantType[]
   restaurantToServiceType RestaurantToServiceType[]
 @@map("restaurants")
@@ -168,4 +168,12 @@ model Accommodation {
   accommodationType     AccommodationType?         @relation(fields: [AccommodationTypeId], references: [id])
 @@map("accommodations")
 
+}
+
+model Photo {
+  id           Int        @id @default(autoincrement())
+  url          String     @db.VarChar(255)
+  restaurant   Restaurant @relation("RestaurantPhotos", fields: [restaurantId], references: [id])
+  restaurantId Int
+  @@map("photos")
 }
