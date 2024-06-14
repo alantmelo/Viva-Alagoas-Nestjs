@@ -31,6 +31,7 @@ model City {
   updated_at    DateTime @default(now()) @db.Timestamp(0)
   beaches Beach[]
   restaurants Restaurant[]
+  accommodatios Accommodation[]
   @@map("cities")
 }
 
@@ -84,6 +85,8 @@ model Restaurant {
   phone  String?  @db.VarChar(50)
   photo  String?  @db.VarChar(50)
   instagram  String?  @db.VarChar(100)
+  openingHours  String?  @db.VarChar(256)
+  // photos  String[]
   website  String?  @db.VarChar(255)
   restaurantTypes RestaurantToRestaurantType[]
   restaurantToServiceType RestaurantToServiceType[]
@@ -106,6 +109,7 @@ model AccommodationType {
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
+  accommodations Accommodation[]
   @@map("accommodation_types")
 }
 
@@ -135,4 +139,33 @@ model RestaurantToServiceType {
   restaurantServiceTypeId Int
   @@id([restaurantId, restaurantServiceTypeId])
   @@map("restaurant_to_service_types")
+}
+
+model Accommodation {
+  id            Int      @id @default(autoincrement())
+  name          String   @db.VarChar(200)
+  description   String?  @db.Text()
+  directions    String?  @db.Text()
+  geolocation   String?  @db.VarChar(200)
+  youtube       String?  @db.VarChar(200)
+  status        Boolean  @default(true)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  updated_at    DateTime @default(now()) @db.Timestamp(0)
+  street        String?  @db.VarChar(200)
+  neighborhood  String?  @db.VarChar(200)
+  number        String?  @db.VarChar(10)
+  additionalAddress String?  @db.Text()
+  zipeCode String?       @db.VarChar(25)
+  city     City?         @relation(fields: [cityId], references: [id])
+  cityId    Int?
+  phone  String?  @db.VarChar(50)
+  photo  String?  @db.VarChar(50)
+  instagram  String?  @db.VarChar(100)
+  openingHours  String?  @db.VarChar(256)
+  // photos  String[]
+  website  String?  @db.VarChar(255)
+  AccommodationTypeId    Int?
+  accommodationType     AccommodationType?         @relation(fields: [AccommodationTypeId], references: [id])
+@@map("accommodations")
+
 }

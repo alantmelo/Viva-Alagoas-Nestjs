@@ -10,6 +10,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
 import { AccommodationTypesModule } from './accommodation-types/accommodation-types.module';
 import { RestaurantServiceTypeModule } from './restaurant-service-type/restaurant-service-type.module';
 import { ServiceTypeModule } from './service-type/service-type.module';
+import { AccommodationsModule } from './accommodations/accommodations.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ServiceTypeModule } from './service-type/service-type.module';
     AccommodationTypesModule,
     RestaurantServiceTypeModule,
     ServiceTypeModule,
+    AccommodationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

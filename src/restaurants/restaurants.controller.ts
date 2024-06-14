@@ -14,7 +14,7 @@ import {
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { FileService } from '../file/file.service';
 
@@ -69,6 +69,19 @@ export class RestaurantsController {
     }
     return { success: true };
   }
+  // @Post('photos/:id')
+  // @UseInterceptors(FilesInterceptor('files', 10))
+  // async uploadPhotos(
+  //   @UploadedFiles() files: Array<Express.Multer.File>,
+  //   @Param('id') id: string,
+  // ) {
+  //   try {
+  //     await this.restaurantsService.savePhotos(+id, files);
+  //   } catch (e) {
+  //     throw new BadRequestException(e.message);
+  //   }
+  //   return { success: true };
+  // }
   // @UseInterceptors(FileInterceptor('files'))
   // @Post('photos/:id')
   // async uploadPhotos(

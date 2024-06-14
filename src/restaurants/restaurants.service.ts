@@ -71,6 +71,20 @@ export class RestaurantsService {
       },
     });
   }
+  // async savePhotos(restaurantId: number, files: Array<Express.Multer.File>) {
+  //   await this.exists(restaurantId);
+
+  //   const photoPaths = files.map((file) => file.filename);
+
+  //   await this.prisma.restaurant.update({
+  //     where: { id: restaurantId },
+  //     data: {
+  //       photos: {
+  //         set: photoPaths, // Adjust this if you have a different photo field structure
+  //       },
+  //     },
+  //   });
+  // }
   async update(id: number, updateRestaurantDto: UpdateRestaurantDto) {
     const { typeIds, cityId, serviceIds, ...rest } = updateRestaurantDto;
     const restaurantServiceTypes =
