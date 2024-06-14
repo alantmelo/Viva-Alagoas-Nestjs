@@ -52,6 +52,9 @@ export class CreateRestaurantDto {
   @IsOptional()
   @IsString()
   website?: string;
+  @IsOptional()
+  @IsString()
+  openingHours?: string;
   status: boolean;
   cityId: number;
   city: number;
