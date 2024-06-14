@@ -63,7 +63,7 @@ export class AccommodationsService {
   }
   async update(id: number, updateAccommodationDto: UpdateAccommodationDto) {
     const { cityId, accommodationTypeId, ...rest } = updateAccommodationDto;
-    // await this.ensureTypesExist(typeIds);
+    await this.exists(id);
     const accommodation = await this.prisma.accommodation.update({
       where: { id },
       data: {
