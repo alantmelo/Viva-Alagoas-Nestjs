@@ -83,4 +83,14 @@ export class BeachesService {
       throw new NotFoundException('Beach not found');
     }
   }
+  async addPhotos(id: number, photos: string[]) {
+    await this.exists(id);
+    const createPhotos = photos.map((photo) => ({
+      url: photo,
+      beachId: id,
+    }));
+    return this.prisma.photo.createMany({
+      data: createPhotos,
+    });
+  }
 }
