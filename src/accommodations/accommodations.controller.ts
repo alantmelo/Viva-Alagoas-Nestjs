@@ -9,13 +9,15 @@ import {
   BadRequestException,
   UploadedFile,
   UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { AccommodationsService } from './accommodations.service';
 import { CreateAccommodationDto } from './dto/create-accommodation.dto';
 import { UpdateAccommodationDto } from './dto/update-accommodation.dto';
 import { FileService } from 'src/file/file.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
+import { existsSync, mkdirSync, writeFileSync } from 'fs';
 
 @Controller('accommodations')
 export class AccommodationsController {
@@ -63,6 +65,33 @@ export class AccommodationsController {
     try {
       await this.fileService.upload(photo, path);
       await this.accommodationsService.updatePhoto(+id, name);
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+    return { success: true };
+  }
+  @UseInterceptors(FilesInterceptor('photos', 10))
+  @Post('gallery/:id')
+  async uploadPhotos(
+    @UploadedFiles() photos: Array<Express.Multer.File>,
+    @Param('id') id: string,
+  ) {
+    const photoUrls: string[] = [];
+    const uploadDir = join(__dirname, '..', 'storage', 'photos');
+    if (!existsSync(uploadDir)) {
+      mkdirSync(uploadDir, { recursive: true });
+    }
+    console.log(photos);
+    console.log(id);
+    try {
+      photos.forEach((photo) => {
+        const ext = photo.mimetype.split('/')[1];
+        const photoName = `accommodation-gallery-${id}-${Date.now()}.${ext}`;
+        const photoPath = join(uploadDir, photoName);
+        writeFileSync(photoPath, photo.buffer);
+        photoUrls.push(photoName);
+      });
+      await this.accommodationsService.addPhotos(+id, photoUrls);
     } catch (e) {
       throw new BadRequestException(e);
     }

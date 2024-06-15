@@ -3,6 +3,7 @@ import { CreateAccommodationDto } from './dto/create-accommodation.dto';
 import { UpdateAccommodationDto } from './dto/update-accommodation.dto';
 
 import { PrismaSerice } from 'src/prisma/prisma.service';
+import { Accommodation } from './entities/accommodation.entity';
 
 @Injectable()
 export class AccommodationsService {
@@ -37,6 +38,7 @@ export class AccommodationsService {
         city: true,
         photo: true,
         accommodationType: true,
+        photos: true,
       },
     });
   }
@@ -110,5 +112,15 @@ export class AccommodationsService {
         `accommodationType(s) with ID(s) ${missingTypeIds.join(', ')} not found`,
       );
     }
+  }
+  async addPhotos(id: number, photos: string[]) {
+    await this.exists(id);
+    const createPhotos = photos.map((photo) => ({
+      url: photo,
+      accomodationId: id,
+    }));
+    return this.prisma.photo.createMany({
+      data: createPhotos,
+    });
   }
 }

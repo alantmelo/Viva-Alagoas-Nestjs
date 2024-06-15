@@ -32,6 +32,7 @@ model City {
   beaches Beach[]
   restaurants Restaurant[]
   accommodatios Accommodation[]
+  photos        Photo[]  @relation("CityPhotos")
   @@map("cities")
 }
 
@@ -52,6 +53,7 @@ model Beach {
   zipeCode String?       @db.VarChar(25)
   city     City?         @relation(fields: [cityId], references: [id])
   cityId    Int?
+  photos        Photo[]  @relation("BeachPhotos")
   @@map("beaches")
 }
 
@@ -162,7 +164,7 @@ model Accommodation {
   photo  String?  @db.VarChar(50)
   instagram  String?  @db.VarChar(100)
   openingHours  String?  @db.VarChar(256)
-  // photos  String[]
+  photos        Photo[]  @relation("AccommodationPhotos")
   website  String?  @db.VarChar(255)
   AccommodationTypeId    Int?
   accommodationType     AccommodationType?         @relation(fields: [AccommodationTypeId], references: [id])
@@ -173,7 +175,13 @@ model Accommodation {
 model Photo {
   id           Int        @id @default(autoincrement())
   url          String     @db.VarChar(255)
-  restaurant   Restaurant @relation("RestaurantPhotos", fields: [restaurantId], references: [id])
-  restaurantId Int
+  city   City? @relation("CityPhotos", fields: [cityId], references: [id])
+  restaurant   Restaurant? @relation("RestaurantPhotos", fields: [restaurantId], references: [id])
+  accommodation   Accommodation? @relation("AccommodationPhotos", fields: [accomodationId], references: [id])
+  beach   Beach? @relation("BeachPhotos", fields: [beachId], references: [id])
+  restaurantId Int?
+  accomodationId Int?
+  beachId Int?
+  cityId Int?
   @@map("photos")
 }

@@ -47,6 +47,7 @@ export class RestaurantsService {
         restaurantTypes: true,
         restaurantToServiceType: true,
         photo: true,
+        photos: true,
       },
     });
   }

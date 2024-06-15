@@ -14,11 +14,7 @@ import {
 import { RestaurantsService } from './restaurants.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
 import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
-import {
-  FileInterceptor,
-  FilesInterceptor,
-  FileFieldsInterceptor,
-} from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
 import { FileService } from '../file/file.service';
 import { existsSync, mkdirSync, writeFileSync } from 'fs';
@@ -97,6 +93,7 @@ export class RestaurantsController {
       });
       await this.restaurantsService.addPhotos(+id, photoUrls);
     } catch (e) {
+      console.log(e);
       throw new BadRequestException(e);
     }
     return { success: true };
