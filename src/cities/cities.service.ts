@@ -77,4 +77,14 @@ export class CitiesService {
       },
     });
   }
+  async addPhotos(id: number, photos: string[]) {
+    await this.exists(id);
+    const createPhotos = photos.map((photo) => ({
+      url: photo,
+      cityId: id,
+    }));
+    return this.prisma.photo.createMany({
+      data: createPhotos,
+    });
+  }
 }
