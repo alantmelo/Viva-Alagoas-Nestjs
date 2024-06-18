@@ -11,6 +11,8 @@ import { AccommodationTypesModule } from './accommodation-types/accommodation-ty
 import { RestaurantServiceTypeModule } from './restaurant-service-type/restaurant-service-type.module';
 import { ServiceTypeModule } from './service-type/service-type.module';
 import { AccommodationsModule } from './accommodations/accommodations.module';
+import { ToursModule } from './tours/tours.module';
+import { TourTypesModule } from './tour-types/tour-types.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { AccommodationsModule } from './accommodations/accommodations.module';
     RestaurantServiceTypeModule,
     ServiceTypeModule,
     AccommodationsModule,
+    ToursModule,
+    TourTypesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
