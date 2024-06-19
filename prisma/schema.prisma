@@ -32,6 +32,7 @@ model City {
   beaches Beach[]
   restaurants Restaurant[]
   accommodatios Accommodation[]
+  tours Tour[]
   photos        Photo[]  @relation("CityPhotos")
   @@map("cities")
 }
@@ -183,6 +184,8 @@ model Photo {
   accomodationId Int?
   beachId Int?
   cityId Int?
+  tour      Tour?   @relation("TourPhotos", fields: [tourId], references: [id])
+  tourId    Int?
   @@map("photos")
 }
 
@@ -195,3 +198,22 @@ model TourType {
   // tours   TourToTourType[]
   @@map("tour_types")
 }
+
+model Tour {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(200)
+  description String?    @db.Text()
+  duration    Int        @db.Int()
+  price       Float      @db.Float()
+  startDate   DateTime   @db.Timestamp(0)
+  endDate     DateTime?  @db.Timestamp(0)
+  status      Boolean    @default(true)
+  created_at   DateTime   @default(now()) @db.Timestamp(0)
+  updated_at   DateTime   @default(now()) @db.Timestamp(0)
+  photos      Photo[]    @relation("TourPhotos")
+  cityId  Int?
+  city    City?   @relation(fields: [cityId], references: [id])
+
+  @@map("tours")
+}
+
