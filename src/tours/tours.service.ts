@@ -9,7 +9,7 @@ export class ToursService {
 
   async create(createTourDto: CreateTourDto) {
     const { cityId, ...rest } = createTourDto;
-    const restaurant = await this.prisma.tour.create({
+    const tour = await this.prisma.tour.create({
       data: {
         ...rest,
         city: cityId ? { connect: { id: cityId } } : undefined,
@@ -19,7 +19,7 @@ export class ToursService {
       },
     });
 
-    return restaurant;
+    return tour;
   }
 
   async findAll() {
@@ -46,22 +46,11 @@ export class ToursService {
     });
   }
 
-  // async updatePhoto(id: number, photo: string) {
-  //   await this.exists(id);
-  //   return this.prisma.tour.update({
-  //     data: {
-  //       photo: photo,
-  //     },
-  //     where: {
-  //       id,
-  //     },
-  //   });
-  // }
   async addPhotos(id: number, photos: string[]) {
     await this.exists(id);
     const createPhotos = photos.map((photo) => ({
       url: photo,
-      restaurantId: id,
+      tourId: id,
     }));
     return this.prisma.photo.createMany({
       data: createPhotos,
@@ -69,8 +58,8 @@ export class ToursService {
   }
   async update(id: number, updateTourDto: UpdateTourDto) {
     const { cityId, ...rest } = updateTourDto;
-
-    const restaurant = await this.prisma.tour.update({
+    await this.exists(id);
+    const tour = await this.prisma.tour.update({
       where: { id },
       data: {
         ...rest,
@@ -78,7 +67,7 @@ export class ToursService {
       },
     });
 
-    return restaurant;
+    return tour;
   }
 
   async remove(id: number) {
