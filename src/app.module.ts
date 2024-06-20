@@ -13,6 +13,7 @@ import { ServiceTypeModule } from './service-type/service-type.module';
 import { AccommodationsModule } from './accommodations/accommodations.module';
 import { ToursModule } from './tours/tours.module';
 import { TourTypesModule } from './tour-types/tour-types.module';
+import { TourPackagesModule } from './tour-packages/tour-packages.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { TourTypesModule } from './tour-types/tour-types.module';
     AccommodationsModule,
     ToursModule,
     TourTypesModule,
+    TourPackagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

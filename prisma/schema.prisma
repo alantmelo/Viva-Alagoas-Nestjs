@@ -213,7 +213,30 @@ model Tour {
   photos      Photo[]    @relation("TourPhotos")
   cityId  Int?
   city    City?   @relation(fields: [cityId], references: [id])
-
+  tourToTourPackages TourToTourPackage[]
   @@map("tours")
 }
+
+model TourPackage {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(200)
+  description String?    @db.Text()
+  status      Boolean    @default(true)
+  created_at   DateTime   @default(now()) @db.Timestamp(0)
+  updated_at   DateTime   @default(now()) @db.Timestamp(0)
+  tours   TourToTourPackage[]
+  @@map("tour_packages")
+}
+
+model TourToTourPackage {
+  tourId       Int
+  tourPackageId Int
+
+  tour         Tour         @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "fk_tour_to_tour_package_tour")
+  tourPackage  TourPackage  @relation(fields: [tourPackageId], references: [id], onDelete: Cascade, map: "fk_tour_to_tour_package_tour_package")
+
+  @@id([tourId, tourPackageId])
+  @@map("tour_to_tour_package")
+}
+
 
