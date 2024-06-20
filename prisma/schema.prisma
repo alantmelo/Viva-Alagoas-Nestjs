@@ -195,7 +195,7 @@ model TourType {
   status        Boolean  @default(true)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   updated_at    DateTime @default(now()) @db.Timestamp(0)
-  // tours   TourToTourType[]
+  tours   TourToTourType[]
   @@map("tour_types")
 }
 
@@ -214,6 +214,7 @@ model Tour {
   cityId  Int?
   city    City?   @relation(fields: [cityId], references: [id])
   tourToTourPackages TourToTourPackage[]
+  tourToTourTypes TourToTourType[]
   @@map("tours")
 }
 
@@ -237,6 +238,16 @@ model TourToTourPackage {
 
   @@id([tourId, tourPackageId])
   @@map("tour_to_tour_package")
+}
+model TourToTourType {
+  tourId       Int
+  tourTypeId Int
+
+  tour         Tour         @relation(fields: [tourId], references: [id], onDelete: Cascade, map: "fk_tour_to_tour_type")
+  tourType  TourType  @relation(fields: [tourTypeId], references: [id], onDelete: Cascade, map: "fk_tour_to_tour_type_tour_")
+
+  @@id([tourId, tourTypeId])
+  @@map("tour_to_tour_type")
 }
 
 

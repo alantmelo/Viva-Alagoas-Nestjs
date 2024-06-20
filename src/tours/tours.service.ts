@@ -8,11 +8,16 @@ export class ToursService {
   constructor(private readonly prisma: PrismaSerice) {}
 
   async create(createTourDto: CreateTourDto) {
-    const { cityId, ...rest } = createTourDto;
+    const { cityId, typeIds, ...rest } = createTourDto;
     const tour = await this.prisma.tour.create({
       data: {
         ...rest,
         city: cityId ? { connect: { id: cityId } } : undefined,
+        tourToTourTypes: {
+          create: typeIds.map((typeId) => ({
+            tourTypeId: typeId,
+          })),
+        },
       },
       include: {
         city: true,
@@ -31,7 +36,7 @@ export class ToursService {
         created_at: true,
         updated_at: true,
         city: true,
-        // photo: true,
+        tourToTourTypes: true,
         photos: true,
       },
     });
@@ -57,13 +62,19 @@ export class ToursService {
     });
   }
   async update(id: number, updateTourDto: UpdateTourDto) {
-    const { cityId, ...rest } = updateTourDto;
+    const { typeIds, cityId, ...rest } = updateTourDto;
     await this.exists(id);
     const tour = await this.prisma.tour.update({
       where: { id },
       data: {
         ...rest,
         city: cityId ? { connect: { id: cityId } } : undefined,
+        tourToTourTypes: {
+          deleteMany: {},
+          create: typeIds.map((typeId) => ({
+            tourTypeId: typeId,
+          })),
+        },
       },
     });
 

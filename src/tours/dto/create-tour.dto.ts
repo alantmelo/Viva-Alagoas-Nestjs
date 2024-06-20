@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsString, IsArray } from 'class-validator';
 
 export class CreateTourDto {
   @IsString()
@@ -12,4 +12,6 @@ export class CreateTourDto {
   status: boolean;
   cityId: number;
   city: number;
+  @IsArray()
+  typeIds: number[];
 }
