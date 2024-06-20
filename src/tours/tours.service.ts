@@ -21,6 +21,7 @@ export class ToursService {
       },
       include: {
         city: true,
+        tourToTourTypes: true,
       },
     });
 
@@ -48,9 +49,11 @@ export class ToursService {
       where: {
         id,
       },
+      include: {
+        tourToTourTypes: { include: { tourType: true } },
+      },
     });
   }
-
   async addPhotos(id: number, photos: string[]) {
     await this.exists(id);
     const createPhotos = photos.map((photo) => ({
