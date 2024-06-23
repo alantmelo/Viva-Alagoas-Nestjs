@@ -29,6 +29,7 @@ export class RestaurantsService {
       },
       include: {
         city: true,
+        restaurantTypes: { include: { restaurantType: true } },
       },
     });
 
@@ -57,6 +58,10 @@ export class RestaurantsService {
     return this.prisma.restaurant.findUnique({
       where: {
         id,
+      },
+      include: {
+        city: true,
+        restaurantTypes: { include: { restaurantType: true } },
       },
     });
   }
