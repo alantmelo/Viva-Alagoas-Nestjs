@@ -15,6 +15,7 @@ import { ToursModule } from './tours/tours.module';
 import { TourTypesModule } from './tour-types/tour-types.module';
 import { TourPackagesModule } from './tour-packages/tour-packages.module';
 import { StoreTypesModule } from './store-types/store-types.module';
+import { StoresModule } from './stores/stores.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { StoreTypesModule } from './store-types/store-types.module';
     TourTypesModule,
     TourPackagesModule,
     StoreTypesModule,
+    StoresModule,
   ],
   controllers: [AppController],
   providers: [AppService],
