@@ -279,7 +279,7 @@ model Store {
   zipeCode String?       @db.VarChar(25)
   city     City?         @relation(fields: [cityId], references: [id])
   cityId    Int?
-  storeType     StoreType?         @relation(fields: [storeTypeId], references: [id])
+  storeType     StoreType?        @relation(fields: [storeTypeId], references: [id])
   storeTypeId    Int?
   phone  String?  @db.VarChar(50)
   photo  String?  @db.VarChar(50)
